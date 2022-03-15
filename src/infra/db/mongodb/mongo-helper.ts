@@ -14,4 +14,12 @@ export const MongoHelper = {
   async clearCollection(model: mongoose.Model<any>): Promise<void> {
     await model.deleteMany({});
   },
+
+  map: (data: any) => {
+    const { _id, ...rest } = data;
+
+    delete rest.__v;
+
+    return { ...rest, id: _id.toHexString() };
+  },
 };
