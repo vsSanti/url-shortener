@@ -71,4 +71,10 @@ describe('DbAddShortUrl usecase', () => {
     expect(addShortUrlRepositorySpy.params.alias).toBe(generateAliasSpy.result);
     expect(addShortUrlRepositorySpy.params.url).toBe(params.url);
   });
+
+  it('should throw if AddShortUrlRepository throws', async () => {
+    jest.spyOn(addShortUrlRepositorySpy, 'add').mockImplementationOnce(throwError);
+    const promise = sut.add(params);
+    await expect(promise).rejects.toThrow();
+  });
 });
