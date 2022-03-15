@@ -3,7 +3,7 @@ import faker from '@faker-js/faker';
 import { AddShortUrlController } from '@/presentation/controllers';
 import { badRequest } from '@/presentation/helpers';
 
-import { ValidationSpy } from '@/tests/domain/mocks';
+import { throwError, ValidationSpy } from '@/tests/domain/mocks';
 
 const mockParams = (): AddShortUrlController.HandleParams => ({
   body: {
@@ -31,5 +31,11 @@ describe('AddShortUrl Controller', () => {
     validationSpy.error = new Error();
     const response = await sut.handle(params);
     expect(response).toEqual(badRequest(validationSpy.error));
+  });
+
+  it('should throw if Validation throws', async () => {
+    jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError);
+    const promise = sut.handle(params);
+    await expect(promise).rejects.toThrow();
   });
 });
