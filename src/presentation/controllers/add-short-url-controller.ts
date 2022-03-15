@@ -1,6 +1,6 @@
 import { AddShortUrl, Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
-import { badRequest, conflict, noContent } from '@/presentation/helpers';
+import { badRequest, conflict, created } from '@/presentation/helpers';
 import { ParameterInUseError } from '@/presentation/errors';
 
 export class AddShortUrlController implements Controller {
@@ -16,9 +16,8 @@ export class AddShortUrlController implements Controller {
       const error = await this.validation.validate(body);
       if (error) return badRequest(error);
 
-      this.addShortUrl.add(body);
-
-      return noContent();
+      const shortUrl = await this.addShortUrl.add(body);
+      return created(shortUrl);
     } catch (error) {
       if (error instanceof ParameterInUseError) return conflict(error);
       throw error;
