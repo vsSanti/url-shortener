@@ -15,13 +15,15 @@ export class DbAddShortUrl implements AddShortUrl {
     Object.assign(this, params);
   }
 
-  async add(params: AddShortUrl.Params): Promise<AddShortUrl.Result> {
+  async add({ url }: AddShortUrl.Params): Promise<AddShortUrl.Result> {
     const generatedAlias = await this.generateAlias.generate();
 
     const foundShortUrl = await this.findShortUrlByAliasRepository.findByAlias({
       alias: generatedAlias,
     });
     if (foundShortUrl) throw new ParameterInUseError('alias');
+
+    this.addShortUrlRepository.add({ alias: generatedAlias, url });
 
     return {
       alias: 'alias',
