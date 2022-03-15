@@ -1,5 +1,6 @@
 import faker from '@faker-js/faker';
 import { Express } from 'express';
+import nanoid from 'nanoid';
 import request from 'supertest';
 
 import { setupApp } from '@/main/config/app';
@@ -39,6 +40,17 @@ describe('ShortUrl Routes', () => {
       expect(response.body).toHaveProperty('alias');
       expect(typeof response.body.alias).toBe('string');
       expect(response.body.alias.length).toBe(8);
+    });
+
+    it('should return 409 if alias is already registered', async () => {
+      const response = await request(app)
+        .post('/short-url')
+        .send({ url: faker.internet.url() })
+        .expect(201);
+
+      jest.spyOn(nanoid, 'nanoid').mockImplementationOnce(() => response.body.alias);
+
+      await request(app).post('/short-url').send({ url: faker.internet.url() }).expect(409);
     });
   });
 });
