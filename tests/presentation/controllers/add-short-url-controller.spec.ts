@@ -1,7 +1,7 @@
 import faker from '@faker-js/faker';
 
 import { AddShortUrlController } from '@/presentation/controllers';
-import { badRequest, conflict } from '@/presentation/helpers';
+import { badRequest, conflict, created } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
 import { AddShortUrlSpy } from '@/tests/presentation/mocks';
@@ -61,5 +61,10 @@ describe('AddShortUrl Controller', () => {
     jest.spyOn(addShortUrlSpy, 'add').mockImplementationOnce(throwError);
     const promise = sut.handle(params);
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should return 201 with short url', async () => {
+    const response = await sut.handle(params);
+    expect(response).toEqual(created(addShortUrlSpy.result));
   });
 });
