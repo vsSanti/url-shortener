@@ -23,12 +23,9 @@ export class DbAddShortUrl implements AddShortUrl {
     });
     if (foundShortUrl) throw new ParameterInUseError('alias');
 
-    this.addShortUrlRepository.add({ alias: generatedAlias, url });
+    const newShortUrl = await this.addShortUrlRepository.add({ alias: generatedAlias, url });
 
-    return {
-      alias: 'alias',
-      url: 'url',
-    };
+    return newShortUrl;
   }
 }
 
