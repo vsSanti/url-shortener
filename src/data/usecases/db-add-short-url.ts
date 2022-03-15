@@ -10,7 +10,9 @@ export class DbAddShortUrl implements AddShortUrl {
   }
 
   async add(params: AddShortUrl.Params): Promise<AddShortUrl.Result> {
-    this.generateAlias.generate();
+    const generatedAlias = await this.generateAlias.generate();
+
+    this.findShortUrlByAliasRepository.findByAlias({ alias: generatedAlias });
 
     return {
       alias: 'alias',
