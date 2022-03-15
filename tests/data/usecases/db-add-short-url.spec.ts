@@ -52,4 +52,10 @@ describe('DbAddShortUrl usecase', () => {
     const promise = sut.add(params);
     await expect(promise).rejects.toThrow(ParameterInUseError);
   });
+
+  it('should throw if FindShortUrlByAliasRepository throws', async () => {
+    jest.spyOn(findShortUrlByAliasRepositorySpy, 'findByAlias').mockImplementationOnce(throwError);
+    const promise = sut.add(params);
+    await expect(promise).rejects.toThrow();
+  });
 });
