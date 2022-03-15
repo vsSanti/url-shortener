@@ -6,7 +6,8 @@ export class ShortUrlMongoRepository
   implements AddShortUrlRepository, FindShortUrlByAliasRepository
 {
   async add({ alias, url }: AddShortUrlRepository.Params): Promise<AddShortUrlRepository.Result> {
-    throw new Error();
+    const response = await new ShortUrlMongoModel({ alias, url }).save();
+    return MongoHelper.map(response.toJSON());
   }
 
   async findByAlias({
