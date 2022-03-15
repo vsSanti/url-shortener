@@ -1,5 +1,6 @@
 import { FindShortUrlByAliasRepository, GenerateAlias } from '@/data/protocols';
 import { AddShortUrl } from '@/domain/usecases';
+import { ParameterInUseError } from '@/presentation/errors';
 
 export class DbAddShortUrl implements AddShortUrl {
   private readonly findShortUrlByAliasRepository: FindShortUrlByAliasRepository;
@@ -12,7 +13,10 @@ export class DbAddShortUrl implements AddShortUrl {
   async add(params: AddShortUrl.Params): Promise<AddShortUrl.Result> {
     const generatedAlias = await this.generateAlias.generate();
 
-    this.findShortUrlByAliasRepository.findByAlias({ alias: generatedAlias });
+    const foundShortUrl = await this.findShortUrlByAliasRepository.findByAlias({
+      alias: generatedAlias,
+    });
+    if (foundShortUrl) throw new ParameterInUseError('alias');
 
     return {
       alias: 'alias',
