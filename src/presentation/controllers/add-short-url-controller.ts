@@ -14,6 +14,8 @@ export class AddShortUrlController implements Controller {
     const error = await this.validation.validate(body);
     if (error) return badRequest(error);
 
+    this.addShortUrl.add(body);
+
     return noContent();
   }
 }
