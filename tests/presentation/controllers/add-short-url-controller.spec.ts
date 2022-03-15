@@ -1,10 +1,11 @@
 import faker from '@faker-js/faker';
 
 import { AddShortUrlController } from '@/presentation/controllers';
-import { badRequest } from '@/presentation/helpers';
+import { badRequest, conflict } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
 import { AddShortUrlSpy } from '@/tests/presentation/mocks';
+import { ParameterInUseError } from '@/presentation/errors';
 
 const mockParams = (): AddShortUrlController.HandleParams => ({
   body: {
@@ -45,5 +46,14 @@ describe('AddShortUrl Controller', () => {
   it('should call AddShortUrl with correct params', async () => {
     await sut.handle(params);
     expect(addShortUrlSpy.params).toEqual(params.body);
+  });
+
+  it('should return 409 if AddShortUrl throws ParameterInUseError', async () => {
+    jest.spyOn(addShortUrlSpy, 'add').mockImplementationOnce(() => {
+      throw new ParameterInUseError('alias');
+    });
+
+    const response = await sut.handle(params);
+    expect(response).toEqual(conflict(new ParameterInUseError('alias')));
   });
 });
