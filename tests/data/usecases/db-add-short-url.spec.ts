@@ -2,6 +2,7 @@ import faker from '@faker-js/faker';
 
 import { DbAddShortUrl } from '@/data/usecases';
 import { AddShortUrl } from '@/domain/usecases';
+import { ParameterInUseError } from '@/presentation/errors';
 
 import { FindShortUrlByAliasRepositorySpy, GenerateAliasSpy } from '@/tests/data/mocks';
 import { throwError } from '@/tests/domain/mocks';
@@ -22,6 +23,8 @@ describe('DbAddShortUrl usecase', () => {
       generateAlias: generateAliasSpy,
     });
     params = mockParams();
+
+    findShortUrlByAliasRepositorySpy.result = undefined;
   });
 
   it('should call GenerateAlias once', async () => {
@@ -39,5 +42,14 @@ describe('DbAddShortUrl usecase', () => {
   it('should call FindShortUrlByAliasRepository with correct params', async () => {
     await sut.add(params);
     expect(findShortUrlByAliasRepositorySpy.params).toEqual({ alias: generateAliasSpy.result });
+  });
+
+  it('should throw ParameterInUseError if FindShortUrlByAliasRepository finds something', async () => {
+    findShortUrlByAliasRepositorySpy.result = {
+      alias: faker.random.alphaNumeric(8),
+      url: faker.internet.url(),
+    };
+    const promise = sut.add(params);
+    await expect(promise).rejects.toThrow(ParameterInUseError);
   });
 });
