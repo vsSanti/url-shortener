@@ -4,6 +4,7 @@ import { DbAddShortUrl } from '@/data/usecases';
 import { AddShortUrl } from '@/domain/usecases';
 
 import { GenerateAliasSpy } from '@/tests/data/mocks';
+import { throwError } from '@/tests/domain/mocks';
 
 const mockParams = (): AddShortUrl.Params => ({ url: faker.internet.url() });
 
@@ -22,5 +23,11 @@ describe('DbAddShortUrl usecase', () => {
     const generateAliasSpyMock = jest.spyOn(generateAliasSpy, 'generate');
     await sut.add(params);
     expect(generateAliasSpyMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw if GenerateAlias throws', async () => {
+    jest.spyOn(generateAliasSpy, 'generate').mockImplementationOnce(throwError);
+    const promise = sut.add(params);
+    await expect(promise).rejects.toThrow();
   });
 });
