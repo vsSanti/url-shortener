@@ -1,6 +1,7 @@
 import { AddShortUrl, Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
-import { badRequest, noContent } from '@/presentation/helpers';
+import { badRequest, conflict, noContent } from '@/presentation/helpers';
+import { ParameterInUseError } from '@/presentation/errors';
 
 export class AddShortUrlController implements Controller {
   private readonly addShortUrl: AddShortUrl;
@@ -11,12 +12,17 @@ export class AddShortUrlController implements Controller {
   }
 
   async handle({ body }: AddShortUrlController.HandleParams): Promise<HttpResponse> {
-    const error = await this.validation.validate(body);
-    if (error) return badRequest(error);
+    try {
+      const error = await this.validation.validate(body);
+      if (error) return badRequest(error);
 
-    this.addShortUrl.add(body);
+      this.addShortUrl.add(body);
 
-    return noContent();
+      return noContent();
+    } catch (error) {
+      if (error instanceof ParameterInUseError) return conflict(error);
+      throw error;
+    }
   }
 }
 
