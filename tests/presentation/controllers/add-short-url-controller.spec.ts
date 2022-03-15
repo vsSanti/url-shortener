@@ -56,4 +56,10 @@ describe('AddShortUrl Controller', () => {
     const response = await sut.handle(params);
     expect(response).toEqual(conflict(new ParameterInUseError('alias')));
   });
+
+  it('should throw if AddShortUrl throws', async () => {
+    jest.spyOn(addShortUrlSpy, 'add').mockImplementationOnce(throwError);
+    const promise = sut.handle(params);
+    await expect(promise).rejects.toThrow();
+  });
 });
