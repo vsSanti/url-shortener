@@ -1,6 +1,22 @@
 import faker from '@faker-js/faker';
 
-import { FindShortUrlByAliasRepository } from '@/data/protocols';
+import { AddShortUrlRepository, FindShortUrlByAliasRepository } from '@/data/protocols';
+
+export class AddShortUrlRepositorySpy implements AddShortUrlRepository {
+  params: AddShortUrlRepository.Params;
+  result: AddShortUrlRepository.Result = {
+    alias: faker.datatype.string(),
+    url: faker.internet.url(),
+  };
+
+  async add(params: AddShortUrlRepository.Params): Promise<AddShortUrlRepository.Result> {
+    this.params = params;
+    this.result.url = params.url;
+    this.result.alias = params.alias;
+
+    return this.result;
+  }
+}
 
 export class FindShortUrlByAliasRepositorySpy implements FindShortUrlByAliasRepository {
   params: FindShortUrlByAliasRepository.Params;

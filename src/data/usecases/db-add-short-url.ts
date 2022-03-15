@@ -1,8 +1,13 @@
-import { FindShortUrlByAliasRepository, GenerateAlias } from '@/data/protocols';
+import {
+  AddShortUrlRepository,
+  FindShortUrlByAliasRepository,
+  GenerateAlias,
+} from '@/data/protocols';
 import { AddShortUrl } from '@/domain/usecases';
 import { ParameterInUseError } from '@/presentation/errors';
 
 export class DbAddShortUrl implements AddShortUrl {
+  private readonly addShortUrlRepository: AddShortUrlRepository;
   private readonly findShortUrlByAliasRepository: FindShortUrlByAliasRepository;
   private readonly generateAlias: GenerateAlias;
 
@@ -27,6 +32,7 @@ export class DbAddShortUrl implements AddShortUrl {
 
 declare namespace DbAddShortUrl {
   export type ConstructorParams = {
+    addShortUrlRepository: AddShortUrlRepository;
     findShortUrlByAliasRepository: FindShortUrlByAliasRepository;
     generateAlias: GenerateAlias;
   };

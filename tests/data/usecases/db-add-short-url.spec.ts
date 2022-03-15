@@ -4,21 +4,28 @@ import { DbAddShortUrl } from '@/data/usecases';
 import { AddShortUrl } from '@/domain/usecases';
 import { ParameterInUseError } from '@/presentation/errors';
 
-import { FindShortUrlByAliasRepositorySpy, GenerateAliasSpy } from '@/tests/data/mocks';
+import {
+  AddShortUrlRepositorySpy,
+  FindShortUrlByAliasRepositorySpy,
+  GenerateAliasSpy,
+} from '@/tests/data/mocks';
 import { throwError } from '@/tests/domain/mocks';
 
 const mockParams = (): AddShortUrl.Params => ({ url: faker.internet.url() });
 
 describe('DbAddShortUrl usecase', () => {
+  let addShortUrlRepositorySpy: AddShortUrlRepositorySpy;
   let findShortUrlByAliasRepositorySpy: FindShortUrlByAliasRepositorySpy;
   let generateAliasSpy: GenerateAliasSpy;
   let sut: DbAddShortUrl;
   let params: AddShortUrl.Params;
 
   beforeEach(() => {
+    addShortUrlRepositorySpy = new AddShortUrlRepositorySpy();
     findShortUrlByAliasRepositorySpy = new FindShortUrlByAliasRepositorySpy();
     generateAliasSpy = new GenerateAliasSpy();
     sut = new DbAddShortUrl({
+      addShortUrlRepository: addShortUrlRepositorySpy,
       findShortUrlByAliasRepository: findShortUrlByAliasRepositorySpy,
       generateAlias: generateAliasSpy,
     });
@@ -57,5 +64,11 @@ describe('DbAddShortUrl usecase', () => {
     jest.spyOn(findShortUrlByAliasRepositorySpy, 'findByAlias').mockImplementationOnce(throwError);
     const promise = sut.add(params);
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should call AddShortUrlRepository with correct params', async () => {
+    await sut.add(params);
+    expect(addShortUrlRepositorySpy.params.alias).toBe(generateAliasSpy.result);
+    expect(addShortUrlRepositorySpy.params.url).toBe(params.url);
   });
 });
