@@ -23,6 +23,18 @@ describe('ShortUrlMongo Repository', () => {
     await MongoHelper.clearCollection(ShortUrlMongoModel);
   });
 
+  describe('add()', () => {
+    it('should return a short url on success', async () => {
+      const response = await sut.add(params);
+      expect(response).toBeTruthy();
+      expect(response).toHaveProperty('id');
+      expect(response).toHaveProperty('createdAt');
+      expect(response).toHaveProperty('updatedAt');
+      expect(response.alias).toBe(params.alias);
+      expect(response.url).toBe(params.url);
+    });
+  });
+
   describe('findByAlias()', () => {
     it('should return undefined if nothing is found', async () => {
       const response = await sut.findByAlias({ alias: 'alias' });

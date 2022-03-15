@@ -1,8 +1,14 @@
-import { FindShortUrlByAliasRepository } from '@/data/protocols';
+import { AddShortUrlRepository, FindShortUrlByAliasRepository } from '@/data/protocols';
 import { MongoHelper } from '@/infra/db/mongodb';
 import { ShortUrlMongoModel } from '@/infra/db/mongodb/schemas';
 
-export class ShortUrlMongoRepository implements FindShortUrlByAliasRepository {
+export class ShortUrlMongoRepository
+  implements AddShortUrlRepository, FindShortUrlByAliasRepository
+{
+  async add({ alias, url }: AddShortUrlRepository.Params): Promise<AddShortUrlRepository.Result> {
+    throw new Error();
+  }
+
   async findByAlias({
     alias,
   }: FindShortUrlByAliasRepository.Params): Promise<FindShortUrlByAliasRepository.Result> {
