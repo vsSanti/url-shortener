@@ -77,4 +77,9 @@ describe('DbAddShortUrl usecase', () => {
     const promise = sut.add(params);
     await expect(promise).rejects.toThrow();
   });
+
+  it('should return a short url on success', async () => {
+    const response = await sut.add(params);
+    expect(response).toEqual(addShortUrlRepositorySpy.result);
+  });
 });
