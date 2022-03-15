@@ -4,6 +4,7 @@ import { AddShortUrlController } from '@/presentation/controllers';
 import { badRequest } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
+import { AddShortUrlSpy } from '@/tests/presentation/mocks';
 
 const mockParams = (): AddShortUrlController.HandleParams => ({
   body: {
@@ -12,13 +13,15 @@ const mockParams = (): AddShortUrlController.HandleParams => ({
 });
 
 describe('AddShortUrl Controller', () => {
+  let addShortUrlSpy: AddShortUrlSpy;
   let validationSpy: ValidationSpy;
   let sut: AddShortUrlController;
   let params: AddShortUrlController.HandleParams;
 
   beforeEach(() => {
+    addShortUrlSpy = new AddShortUrlSpy();
     validationSpy = new ValidationSpy();
-    sut = new AddShortUrlController({ validation: validationSpy });
+    sut = new AddShortUrlController({ addShortUrl: addShortUrlSpy, validation: validationSpy });
     params = mockParams();
   });
 
@@ -37,5 +40,10 @@ describe('AddShortUrl Controller', () => {
     jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError);
     const promise = sut.handle(params);
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should call AddShortUrl with correct params', async () => {
+    await sut.handle(params);
+    expect(addShortUrlSpy.params).toEqual(params.body);
   });
 });

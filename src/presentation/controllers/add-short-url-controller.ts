@@ -1,8 +1,9 @@
-import { Validation } from '@/domain/usecases';
+import { AddShortUrl, Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
 import { badRequest, noContent } from '@/presentation/helpers';
 
 export class AddShortUrlController implements Controller {
+  private readonly addShortUrl: AddShortUrl;
   private readonly validation: Validation;
 
   constructor(params: AddShortUrlController.ConstructorParams) {
@@ -19,6 +20,7 @@ export class AddShortUrlController implements Controller {
 
 export namespace AddShortUrlController {
   export type ConstructorParams = {
+    addShortUrl: AddShortUrl;
     validation: Validation;
   };
 
