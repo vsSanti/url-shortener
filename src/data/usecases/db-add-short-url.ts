@@ -9,6 +9,8 @@ export class DbAddShortUrl implements AddShortUrl {
   }
 
   async add(params: AddShortUrl.Params): Promise<AddShortUrl.Result> {
+    this.generateAlias.generate();
+
     return {
       alias: 'alias',
       url: 'url',
