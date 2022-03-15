@@ -53,8 +53,11 @@ describe('DbAddShortUrl usecase', () => {
 
   it('should throw ParameterInUseError if FindShortUrlByAliasRepository finds something', async () => {
     findShortUrlByAliasRepositorySpy.result = {
+      id: faker.random.alphaNumeric(8),
       alias: faker.random.alphaNumeric(8),
       url: faker.internet.url(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     const promise = sut.add(params);
     await expect(promise).rejects.toThrow(ParameterInUseError);

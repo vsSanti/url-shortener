@@ -21,8 +21,11 @@ export class AddShortUrlRepositorySpy implements AddShortUrlRepository {
 export class FindShortUrlByAliasRepositorySpy implements FindShortUrlByAliasRepository {
   params: FindShortUrlByAliasRepository.Params;
   result: FindShortUrlByAliasRepository.Result = {
-    alias: faker.datatype.string(),
+    id: faker.random.alphaNumeric(),
+    alias: faker.random.alphaNumeric(),
     url: faker.internet.url(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   async findByAlias(
