@@ -53,4 +53,17 @@ describe('ShortUrl Routes', () => {
       await request(app).post('/short-url').send({ url: faker.internet.url() }).expect(409);
     });
   });
+
+  describe('GET /:alias', () => {
+    it('should return 404 if alias is not registered', async () => {
+      await request(app).get('/something').expect(404);
+    });
+
+    it('should redirect to correct url on success', async () => {
+      const url = faker.internet.url();
+      const response = await request(app).post('/short-url').send({ url }).expect(201);
+
+      await request(app).get(`/${response.body.alias}`).expect(301).expect('Location', url);
+    });
+  });
 });
