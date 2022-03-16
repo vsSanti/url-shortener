@@ -4,6 +4,7 @@ import { DbLoadShortUrlByAlias } from '@/data/usecases';
 import { LoadShortUrlByAlias } from '@/domain/usecases';
 
 import { FindShortUrlByAliasRepositorySpy } from '@/tests/data/mocks';
+import { throwError } from '@/tests/domain/mocks';
 
 const mockParams = (): LoadShortUrlByAlias.Params => ({
   alias: faker.random.alphaNumeric(8),
@@ -32,5 +33,11 @@ describe('DbLoadShortUrlByAlias usecase', () => {
     findShortUrlByAliasRepositorySpy.result = undefined;
     const response = await sut.loadByAlias(params);
     expect(response).toBeUndefined();
+  });
+
+  it('should throw if FindShortUrlByAliasRepository throws', async () => {
+    jest.spyOn(findShortUrlByAliasRepositorySpy, 'findByAlias').mockImplementationOnce(throwError);
+    const promise = sut.loadByAlias(params);
+    await expect(promise).rejects.toThrow();
   });
 });
