@@ -1,6 +1,6 @@
 import { LoadShortUrlByAlias, Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
-import { badRequest, noContent } from '@/presentation/helpers';
+import { badRequest, noContent, notFound } from '@/presentation/helpers';
 
 export class LoadShortUrlController implements Controller {
   private readonly loadShortUrlByAlias: LoadShortUrlByAlias;
@@ -15,7 +15,8 @@ export class LoadShortUrlController implements Controller {
     if (error) return badRequest(error);
 
     const { alias } = params;
-    this.loadShortUrlByAlias.loadByAlias({ alias });
+    const shortUrl = await this.loadShortUrlByAlias.loadByAlias({ alias });
+    if (!shortUrl) return notFound();
 
     return noContent();
   }
