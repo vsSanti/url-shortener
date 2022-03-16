@@ -1,6 +1,6 @@
 import { Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
-import { noContent } from '@/presentation/helpers';
+import { badRequest, noContent } from '@/presentation/helpers';
 
 export class LoadShortUrlController implements Controller {
   private readonly validation: Validation;
@@ -10,7 +10,9 @@ export class LoadShortUrlController implements Controller {
   }
 
   async handle({ params }: any): Promise<HttpResponse> {
-    this.validation.validate(params);
+    const error = await this.validation.validate(params);
+    if (error) return badRequest(error);
+
     return noContent();
   }
 }
