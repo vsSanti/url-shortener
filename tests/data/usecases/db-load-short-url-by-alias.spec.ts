@@ -27,4 +27,10 @@ describe('DbLoadShortUrlByAlias usecase', () => {
     await sut.loadByAlias(params);
     expect(findShortUrlByAliasRepositorySpy.params).toEqual(params);
   });
+
+  it('should return undefined if FindShortUrlByAliasRepository returns undefined', async () => {
+    findShortUrlByAliasRepositorySpy.result = undefined;
+    const response = await sut.loadByAlias(params);
+    expect(response).toBeUndefined();
+  });
 });
