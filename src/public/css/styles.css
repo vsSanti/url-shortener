@@ -57,6 +57,7 @@ body {
 .form-wrapper .form-footer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -68,6 +69,7 @@ body {
   color: white;
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s;
 }
 
 .form-wrapper .form-footer .btn:hover {
@@ -75,6 +77,15 @@ body {
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.1);
 }
 
-.form-wrapper .form-footer .btn-submit {
+.form-wrapper .form-footer .btn.btn-submit {
   background-color: #3986ff;
+}
+
+.form-wrapper .form-footer .btn.btn-success {
+  color: white;
+  background-color: #53d477;
+}
+
+.hidden {
+  visibility: hidden;
 }
