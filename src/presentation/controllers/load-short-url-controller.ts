@@ -10,6 +10,7 @@ export class LoadShortUrlController implements Controller {
   }
 
   async handle({ params }: any): Promise<HttpResponse> {
+    this.validation.validate(params);
     return noContent();
   }
 }
