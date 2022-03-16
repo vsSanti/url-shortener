@@ -25,6 +25,7 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/main/**',
+    '!<rootDir>/src/public/**',
     '!<rootDir>/src/presentation/helpers/**',
     '!<rootDir>/src/presentation/errors/**',
     '!<rootDir>/src/**/index.ts',
