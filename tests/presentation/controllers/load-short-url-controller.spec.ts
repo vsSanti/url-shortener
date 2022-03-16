@@ -1,7 +1,7 @@
 import faker from '@faker-js/faker';
 
 import { LoadShortUrlController } from '@/presentation/controllers';
-import { badRequest } from '@/presentation/helpers';
+import { badRequest, notFound } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
 import { LoadShortUrlByAliasSpy } from '@/tests/presentation/mocks';
@@ -45,8 +45,14 @@ describe('LoadShortUrl Controller', () => {
     await expect(promise).rejects.toThrow();
   });
 
-  it('should call LoadShortUrlByAliasSpy with correct params', async () => {
+  it('should call LoadShortUrlByAlias with correct params', async () => {
     await sut.handle(params);
     expect(loadShortUrlByAliasSpy.params).toEqual(params.params);
+  });
+
+  it('should return 404 if LoadShortUrlByAlias returns undefined', async () => {
+    loadShortUrlByAliasSpy.result = undefined;
+    const response = await sut.handle(params);
+    expect(response).toEqual(notFound());
   });
 });
