@@ -9,7 +9,9 @@ export class DbLoadShortUrlByAlias implements LoadShortUrlByAlias {
   }
 
   async loadByAlias({ alias }: LoadShortUrlByAlias.Params): Promise<LoadShortUrlByAlias.Result> {
-    throw new Error();
+    this.findShortUrlByAliasRepository.findByAlias({ alias });
+
+    return undefined;
   }
 }
 
