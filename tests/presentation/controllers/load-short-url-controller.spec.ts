@@ -55,4 +55,10 @@ describe('LoadShortUrl Controller', () => {
     const response = await sut.handle(params);
     expect(response).toEqual(notFound());
   });
+
+  it('should return 500 if LoadShortUrlByAlias throws', async () => {
+    jest.spyOn(loadShortUrlByAliasSpy, 'loadByAlias').mockImplementationOnce(throwError);
+    const promise = sut.handle(params);
+    await expect(promise).rejects.toThrow();
+  });
 });
