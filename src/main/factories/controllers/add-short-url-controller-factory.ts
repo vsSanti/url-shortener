@@ -5,7 +5,7 @@ import { AddShortUrlController } from '@/presentation/controllers';
 import { Controller } from '@/presentation/protocols';
 
 export const makeAddShortUrlController = (): Controller => {
-  const schema = Joi.object({ url: Joi.string().required() });
+  const schema = Joi.object({ url: Joi.string().trim().uri().required() });
 
   const controller = new AddShortUrlController({
     addShortUrl: makeDbAddShortUrl(),
