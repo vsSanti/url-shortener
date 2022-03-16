@@ -1,8 +1,17 @@
 version: '3.7'
 
 services:
-  url-shortener:
-    container_name: url-shortener
+  mongo:
+    container_name: mongo-container-url-shortener
+    image: mongo:5.0.3
+    restart: always
+    volumes:
+      - ./.data:/.data/db
+    ports:
+      - "27017:27017"
+
+  node:
+    container_name: node-url-shortener
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,8 +21,11 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
     environment:
       - PORT=4000
+      - MONGO_URL=mongodb://mongo:27017/url-shortener
     expose:
       - '4000'
     ports:
       - '4000:4000'
     command: npm run dev
+    links:
+      - mongo
