@@ -15,7 +15,7 @@ describe('DbLoadShortUrlByAlias usecase', () => {
   let sut: DbLoadShortUrlByAlias;
   let params: LoadShortUrlByAlias.Params;
 
-  beforeAll(() => {
+  beforeEach(() => {
     findShortUrlByAliasRepositorySpy = new FindShortUrlByAliasRepositorySpy();
     sut = new DbLoadShortUrlByAlias({
       findShortUrlByAliasRepository: findShortUrlByAliasRepositorySpy,
