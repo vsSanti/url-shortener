@@ -16,6 +16,11 @@ export const noContent = (): HttpResponse => ({
   body: undefined,
 });
 
+export const movedPermanently = (data: any): HttpResponse => ({
+  statusCode: 301,
+  body: data,
+});
+
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
   body: error,

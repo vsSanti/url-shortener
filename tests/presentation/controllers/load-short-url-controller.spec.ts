@@ -1,7 +1,7 @@
 import faker from '@faker-js/faker';
 
 import { LoadShortUrlController } from '@/presentation/controllers';
-import { badRequest, notFound } from '@/presentation/helpers';
+import { badRequest, movedPermanently, notFound } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
 import { LoadShortUrlByAliasSpy } from '@/tests/presentation/mocks';
@@ -60,5 +60,10 @@ describe('LoadShortUrl Controller', () => {
     jest.spyOn(loadShortUrlByAliasSpy, 'loadByAlias').mockImplementationOnce(throwError);
     const promise = sut.handle(params);
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should return 301 with correct alias on success', async () => {
+    const response = await sut.handle(params);
+    expect(response).toEqual(movedPermanently(loadShortUrlByAliasSpy.result?.url));
   });
 });
