@@ -52,6 +52,10 @@ describe('ShortUrl Routes', () => {
 
       await request(app).post('/short-url').send({ url: faker.internet.url() }).expect(409);
     });
+
+    it('should return 400 if url passed is not a real URL', async () => {
+      await request(app).post('/short-url').send({ url: faker.random.word() }).expect(400);
+    });
   });
 
   describe('GET /:alias', () => {
