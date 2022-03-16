@@ -14,6 +14,9 @@ export class LoadShortUrlController implements Controller {
     const error = await this.validation.validate(params);
     if (error) return badRequest(error);
 
+    const { alias } = params;
+    this.loadShortUrlByAlias.loadByAlias({ alias });
+
     return noContent();
   }
 }
