@@ -1,6 +1,6 @@
 {
   "name": "url-shortener",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A simple URL shortener developed with node and express",
   "main": "index.js",
   "scripts": {
