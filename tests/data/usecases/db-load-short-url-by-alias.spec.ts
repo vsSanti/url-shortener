@@ -40,4 +40,12 @@ describe('DbLoadShortUrlByAlias usecase', () => {
     const promise = sut.loadByAlias(params);
     await expect(promise).rejects.toThrow();
   });
+
+  it('should return a short url on success', async () => {
+    const response = await sut.loadByAlias(params);
+    expect(response).toHaveProperty('url');
+    expect(response).toHaveProperty('alias');
+    expect(response?.url).toBe(findShortUrlByAliasRepositorySpy.result?.url);
+    expect(response?.alias).toBe(findShortUrlByAliasRepositorySpy.result?.alias);
+  });
 });
