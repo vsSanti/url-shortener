@@ -2,12 +2,18 @@ import { Express } from 'express';
 import request from 'supertest';
 
 import { setupApp } from '@/main/config/app';
+import { MongoHelper } from '@/infra/db/mongodb';
 
 describe('Content Type Middleware', () => {
   let app: Express;
 
   beforeAll(async () => {
     app = await setupApp();
+    await MongoHelper.connect();
+  });
+
+  afterAll(async () => {
+    await MongoHelper.disconnect();
   });
 
   test('should return default content type as json', async () => {
@@ -16,13 +22,5 @@ describe('Content Type Middleware', () => {
     });
 
     await request(app).get('/test_content_type').expect('content-type', /json/);
-  });
-
-  test('should return xml content type when forced', async () => {
-    app.get('/test_content_type_xml', (req, res) => {
-      res.type('xml').send('');
-    });
-
-    await request(app).get('/test_content_type_xml').expect('content-type', /xml/);
   });
 });
