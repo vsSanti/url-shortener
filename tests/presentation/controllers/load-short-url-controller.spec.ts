@@ -4,6 +4,7 @@ import { LoadShortUrlController } from '@/presentation/controllers';
 import { badRequest } from '@/presentation/helpers';
 
 import { throwError, ValidationSpy } from '@/tests/domain/mocks';
+import { LoadShortUrlByAliasSpy } from '@/tests/presentation/mocks';
 
 const mockParams = (): LoadShortUrlController.HandleParams => ({
   params: {
@@ -12,13 +13,16 @@ const mockParams = (): LoadShortUrlController.HandleParams => ({
 });
 
 describe('LoadShortUrl Controller', () => {
+  let loadShortUrlByAliasSpy: LoadShortUrlByAliasSpy;
   let validationSpy: ValidationSpy;
   let sut: LoadShortUrlController;
   let params: LoadShortUrlController.HandleParams;
 
   beforeEach(() => {
+    loadShortUrlByAliasSpy = new LoadShortUrlByAliasSpy();
     validationSpy = new ValidationSpy();
     sut = new LoadShortUrlController({
+      loadShortUrlByAlias: loadShortUrlByAliasSpy,
       validation: validationSpy,
     });
     params = mockParams();
@@ -39,5 +43,10 @@ describe('LoadShortUrl Controller', () => {
     jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError);
     const promise = sut.handle(params);
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should call LoadShortUrlByAliasSpy with correct params', async () => {
+    await sut.handle(params);
+    expect(loadShortUrlByAliasSpy.params).toEqual(params.params);
   });
 });

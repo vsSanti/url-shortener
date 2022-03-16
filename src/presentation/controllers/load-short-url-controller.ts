@@ -1,8 +1,9 @@
-import { Validation } from '@/domain/usecases';
+import { LoadShortUrlByAlias, Validation } from '@/domain/usecases';
 import { Controller, HttpResponse } from '@/presentation/protocols';
 import { badRequest, noContent } from '@/presentation/helpers';
 
 export class LoadShortUrlController implements Controller {
+  private readonly loadShortUrlByAlias: LoadShortUrlByAlias;
   private readonly validation: Validation;
 
   constructor(params: LoadShortUrlController.ConstructorParams) {
@@ -19,6 +20,7 @@ export class LoadShortUrlController implements Controller {
 
 export namespace LoadShortUrlController {
   export type ConstructorParams = {
+    loadShortUrlByAlias: LoadShortUrlByAlias;
     validation: Validation;
   };
 
