@@ -1,5 +1,5 @@
 # URL Shortener
-> This repository was created based on [my template for express applications](https://github.com/vsSanti/nodejs-express-template) to develop the take-home assessment project for Stockguard: an URL Shortener. There's a [`README`](https://github.com/vsSanti/nodejs-express-template/blob/master/readme.md) there that explains a little bit about the code architecture.
+> This repository was created based on [my template for express applications](https://github.com/vsSanti/nodejs-express-template) to develop the take-home assessment project for a position: an URL Shortener. There's a [`README`](https://github.com/vsSanti/nodejs-express-template/blob/master/readme.md) that explains a little bit about the code architecture.
 
 ## About the project
 Long URLs aren't easy to email, tweet, or otherwise share. This project solves this issue for you: give us an URL and this piece of software is going to generate an alias for it. After that you can count on our services to redirect you to the correct place.
